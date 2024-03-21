@@ -82,7 +82,7 @@ async function dataOphalen() {
         console.log("dataOphalen(): error.message:",  err.message)
         console.log("dataOphalen(): error (typeof):",  typeof err)
         
-        switch (err) {
+        switch (err.message) {
             case "Gefaald om te fetchen": 
                 ophaalKnop.innerHTML="Domein niet toegankelijk. Probeer opnieuw en klik op deze knop"; break;
             case "Lege plaats": 
@@ -129,10 +129,10 @@ function geoAPI() {
                             
                             if (response.status>=400 && response.status<=499) {
                                 if (response.status===401) {
-                                    //reject("401: Authorisatieproces niet goed verlopen"); 
+                                    reject("401: Authorisatieproces niet goed verlopen"); 
                                     //return "401: Authorisatieproces niet goed verlopen";   
                                     //throw new Error("401: Authorisatieproces niet goed verlopen");
-                                } else { 
+                                }   else { 
                                             if (locatiePlaatsnaam==="") {
                                                 throw new Error("Lege plaats");
                                                 //reject("Lege plaats");
@@ -140,7 +140,7 @@ function geoAPI() {
                                                 throw new Error("Client Error");
                                                 //reject("Client Error"); 
                                               }
-                                }
+                                    }
                             }
                         }
                         return response.json(); 
@@ -158,33 +158,23 @@ function geoAPI() {
                             console.log("geoAPI: 2de .then: value:", data);
                             console.log(typeof data.cod);
 
-                            if (data.cod==401) {
-                                //reject("401: Authorisatieproces niet goed verlopen"); 
-                                //throw new Error("401: Authorisatieproces niet goed verlopen"); 
-                            }
 
                             if (data.length === 0) { throw new Error("onherkenbare plaats"); }     //{ reject("onherkenbare plaats"); }
 
 
-                            console.log("geoAPI: 2de .then: value", data);
+                            console.log("geoAPI: value", data);
                             lat=data[0].lat;
                             lon=data[0].lon;
-                            console.log("geoAPI: 2de .then: lat", lat);
-                            console.log("geoAPI: 2de .then: lon", lon);
+                            console.log("geoAPI: lat", lat);
+                            console.log("geoAPI: lon", lon);
                             deFunctie("geslaagd");
 
-
-
-
-
-
                 })
-
             .catch( (reason) => {                    //.catch behorende bij 2de .then          // .catch( (geweigerd) => {   
-                console.log("geoAPI: .CATCH  reason: ", reason);
-                console.log("geoAPI: .CATCH  reason.name:", reason.name);
-                console.log("geoAPI: .CATCH  reason.message:", reason.message);
-                reject(reason);    //    ////////ZO LAAT MOGELIJK REJECTEN   20240321 1654  is de voorlopige conclusie
+                console.log("geoAPI: 2de .then (.catch): ", reason);
+                console.log("geoAPI: 1ste .then reason.name:", reason.name);
+                console.log("geoAPI: 1ste .then reason.message:", reason.message);
+                reject(reason);
             })
     });
 }
