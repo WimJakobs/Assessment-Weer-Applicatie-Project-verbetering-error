@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weer Applicatie</title>
+    <link rel="stylesheet" href="./styles/style.css">
+</head>
+<body>
+    <div class="container">
+            <h1>Weerapplicatie</h1>
+                
+            <div class="container-invoer">
+                <fieldset>
+                    <label for="locatie">Locatie</label>    
+                    <input type="text" name="locatie" id="locatie" placeholder="Vul a.u.b. een plaats in">
+                </fieldset>
+                <button id="knopDataOphalen" >Haal weerdata op</button>
+            </div>
+            
+            <div class="container-uitvoer">    <!-- deze is louter nodig voor desktop, echter deze vernaggeld de mobile  -->
+                <table>
+                    <tr>
+                        <td>Plaats</td>
+                        <td id="plaats"></td>
+                    </tr>
+
+                    <tr>
+                        <td>Tijdstip</td>
+                        <td id="tijdstip"></td>
+                    </tr>
+
+
+                    <tr>
+                        <td>Temperatuur</td>
+                        <td id="temperatuur"></td>
+                    </tr>
+            
+                    <tr>
+                        <td>Windrichting</td>
+                        <td id="windrichting"></td>
+                    </tr>
+                
+                    <tr>
+                        <td>Windsnelheid</td>
+                        <td id="windsnelheid"></td>
+                    </tr>
+
+                    <tr>
+                        <td>Vochtigheid</td>
+                        <td id="vochtigheid"></td>
+                    </tr>
+
+                    <tr>
+                        <td>Weerconditie</td>
+                        <td id="weerconditie"></td>
+                    </tr>
+
+
+                </table>
+
+
+                <img src="./images/WitteVlak.png" id="weersymbool" alt="weerconditie-grafisch">
+            </div>
+
+    
+    
+    
+    
+    </div>
+    
+
+<script src="./scripts/script.js"></script>
+</body>
+</html>
