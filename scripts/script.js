@@ -106,7 +106,10 @@ async function dataOphalen() {
 
 function geoAPI() {
     
-    return new Promise( (deFunctie, reject) => {     
+    
+    //return new Promise( (deFunctie, reject) => {
+
+    let promiseVar = new Promise( (deFunctie, reject) => {     
     
             let samengesteldUrlGEO;    
 
@@ -119,8 +122,13 @@ function geoAPI() {
             console.log("geoAPI: samengesteldUrlGEO", samengesteldUrlGEO);
 
 
-            fetch(samengesteldUrlGEO)
-            .then(  (response) => {     //1ste .then   Veld 1
+            let fetchVar = fetch(samengesteldUrlGEO);
+            
+            console.log(fetchVar);
+                       
+            
+            
+            fetchVar.then(  (response) => {     //1ste .then   Veld 1
                         console.log("geoAPI: 1ste then: response:", response);
                         console.log("geoAPI: 1ste then: response.status:", response.status)
                         console.log("geoAPI: 1ste then: response.status, typeof:", typeof response.status)
@@ -129,9 +137,10 @@ function geoAPI() {
                             
                             if (response.status>=400 && response.status<=499) {
                                 if (response.status===401) {
+                                    //fetchVar.reject("401: Authorisatieproces niet goed verlopen"); 
                                     //reject("401: Authorisatieproces niet goed verlopen"); 
                                     //return "401: Authorisatieproces niet goed verlopen";   
-                                    //throw new Error("401: Authorisatieproces niet goed verlopen");
+                                    throw new Error("401: Authorisatieproces niet goed verlopen");
                                 } else { 
                                             if (locatiePlaatsnaam==="") {
                                                 throw new Error("Lege plaats");
@@ -153,25 +162,29 @@ function geoAPI() {
                     }
             )
             
-            .then( (data) => {                          //2de .then
+            console.log(fetchVar);
 
-                            console.log("geoAPI: 2de .then: value:", data);
-                            console.log(typeof data.cod);
+
+            fetchVar.then( (data) => {                          //2de .then
+
+                            console.log("geoAPI: 2de .then: data:", data);
+                            console.log("geoAPI: 2de .then: data.cod (type off):", typeof data.cod);
 
                             if (data.cod==401) {
                                 //reject("401: Authorisatieproces niet goed verlopen"); 
                                 //throw new Error("401: Authorisatieproces niet goed verlopen"); 
+                            } else { 
+
+                                if (data.length === 0) { throw new Error("onherkenbare plaats"); }     //{ reject("onherkenbare plaats"); }
+
+
+                                console.log("geoAPI: 2de .then: data (verderop)", data);
+                                lat=data[0].lat;
+                                lon=data[0].lon;
+                                console.log("geoAPI: 2de .then: lat", lat);
+                                console.log("geoAPI: 2de .then: lon", lon);
+                                deFunctie("geslaagd");
                             }
-
-                            if (data.length === 0) { throw new Error("onherkenbare plaats"); }     //{ reject("onherkenbare plaats"); }
-
-
-                            console.log("geoAPI: 2de .then: value", data);
-                            lat=data[0].lat;
-                            lon=data[0].lon;
-                            console.log("geoAPI: 2de .then: lat", lat);
-                            console.log("geoAPI: 2de .then: lon", lon);
-                            deFunctie("geslaagd");
 
 
 
@@ -180,13 +193,22 @@ function geoAPI() {
 
                 })
 
-            .catch( (reason) => {                    //.catch behorende bij 2de .then          // .catch( (geweigerd) => {   
+            fetchVar.catch( (reason) => {                    //.catch behorende bij 2de .then          // .catch( (geweigerd) => {   
                 console.log("geoAPI: .CATCH  reason: ", reason);
                 console.log("geoAPI: .CATCH  reason.name:", reason.name);
                 console.log("geoAPI: .CATCH  reason.message:", reason.message);
                 reject(reason);    //    ////////ZO LAAT MOGELIJK REJECTEN   20240321 1654  is de voorlopige conclusie
             })
     });
+
+    console.log("geoAPI: ", promiseVar)
+    //promiseVar.catch ( (error) => console.log("promiseVar.catch", error) );
+        
+    return promiseVar;
+
+
+
+
 }
 
 
