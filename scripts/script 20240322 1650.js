@@ -170,7 +170,7 @@ function geoAPI() {
                             console.log("geoAPI: 2de .then: data:", data);
                             console.log("geoAPI: 2de .then: data.cod (type off):", typeof data.cod);
 
-                            if (data.cod == 401) {
+                            if (data.cod==401) {
                                 //reject("401: Authorisatieproces niet goed verlopen"); 
                                 //throw new Error("401: Authorisatieproces niet goed verlopen"); 
                             } else { 
