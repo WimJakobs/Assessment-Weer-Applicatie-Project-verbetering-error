@@ -122,24 +122,13 @@ function geoAPI() {
             console.log("geoAPI: samengesteldUrlGEO", samengesteldUrlGEO);
 
 
-            //let fetchVar = fetch(samengesteldUrlGEO);
-            //console.log(fetchVar);
-            //let responseJSON = fetchVar.json();            
-            //console.log(responseJSON);
+            let fetchVar = fetch(samengesteldUrlGEO);
             
+            console.log(fetchVar);
                        
             
-
-
-
-
-
-
-
-
-            fetch(samengesteldUrlGEO)
-            //fetchVar.then(  (response) => {     //1ste .then   Veld 1
-            .then(  (response) => {     //1ste .then   Veld 1
+            
+            fetchVar.then(  (response) => {     //1ste .then   Veld 1
                         console.log("geoAPI: 1ste then: response:", response);
                         console.log("geoAPI: 1ste then: response.status:", response.status)
                         console.log("geoAPI: 1ste then: response.status, typeof:", typeof response.status)
@@ -163,9 +152,9 @@ function geoAPI() {
                                 }
                             }
                         }
-                        //let responseJSON = response.json();
-                        //console.log(responseJSON);
-                        return response.json(); 
+                        let responseJSON = response.json();
+                        console.log(responseJSON);
+                        //return response.json(); 
                     }
                     ,(reason) => {      //1ste .then   Veld 2
                         console.log("geoAPI: 1ste .then reason:", reason);
@@ -175,15 +164,14 @@ function geoAPI() {
                     }
             )
             
-            //console.log(fetchVar);
+            console.log(fetchVar);
 
 
-            //fetchVar.then( (data) => {                          //2de .then
-            .then( (data) => {                          //2de .then
+            fetchVar.then( (data) => {                          //2de .then
 
                             console.log("geoAPI: 2de .then: data                  : ", data);
                             console.log("geoAPI: 2de .then: data.status (type off): ", typeof data.status);
-                            //console.log("geoAPI: 2de .then: fetchVar              : ", fetchVar);
+                            console.log("geoAPI: 2de .then: fetchVar              : ", fetchVar);
                             console.log("geoAPI: 2de .then: promiseVar            : ", promiseVar);
 
                             
@@ -211,8 +199,7 @@ function geoAPI() {
 
                 })
 
-            //fetchVar.catch( (reason) => {                    //.catch behorende bij 2de .then          // .catch( (geweigerd) => {   
-            .catch( (reason) => {                    //.catch behorende bij 2de .then          // .catch( (geweigerd) => {   
+            fetchVar.catch( (reason) => {                    //.catch behorende bij 2de .then          // .catch( (geweigerd) => {   
                 console.log("geoAPI: .CATCH  reason: ", reason);
                 console.log("geoAPI: .CATCH  reason.name:", reason.name);
                 console.log("geoAPI: .CATCH  reason.message:", reason.message);
