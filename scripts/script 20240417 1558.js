@@ -15,9 +15,9 @@ appid = keyURL;
 
 /* ------ invoerveld en button uit HTML ophalen ------- */
 const locatie = document.getElementById("locatie");
-    console.log("locatie", locatie);
+  console.log("locatie", locatie);
 const ophaalKnop = document.getElementById("knopDataOphalen");
-    console.log("ophaalKnop", ophaalKnop);
+
 
 
 
@@ -90,8 +90,7 @@ async function dataOphalen() {
             case "onherkenbare plaats": 
                 ophaalKnop.innerHTML="Plaats niet herkent. Probeer opnieuw en klik op deze knop"; break;
             case "401: Authorisatieproces niet goed verlopen": 
-                ophaalKnop.innerHTML="401: Authorisatieproces niet goed verlopen. Probeer opnieuw en klik op deze knop"; 
-                ophaalKnop.style="width: 210px"; break;
+                ophaalKnop.innerHTML="401: Authorisatieproces niet goed verlopen. Probeer opnieuw en klik op deze knop"; break;
             case "Client Error": 
                 ophaalKnop.innerHTML="Client Error. Probeer opnieuw en klik op deze knop"; break;
         }
@@ -110,12 +109,12 @@ function geoAPI() {
     
     //return new Promise( (deFunctie, reject) => {
 
-    let promiseVar = new Promise( (vervullen, afwijzen) => {         //let promiseVar = new Promise( (deFunctie, reject) => {     
+    let promiseVar = new Promise( (deFunctie, reject) => {         //let promiseVar = new Promise( (deFunctie, reject) => {     
     
             let samengesteldUrlGEO;    
 
             
-            const urlGEO = 'http://api.openweathermap.org/geo/1.0/direct?';
+            const urlGEO = 'http://api.openweathermapXXXXX.org/geo/1.0/direct?';
 
             locatiePlaatsnaam = locatie.value;
             samengesteldUrlGEO = urlGEO + "q=" + locatiePlaatsnaam +"&appid=" + appid ;
@@ -180,7 +179,7 @@ function geoAPI() {
                         console.log("geoAPI: 1ste .then reason:", reason);
                         console.log("geoAPI: 1ste .then reason.name:", reason.name);
                         console.log("geoAPI: 1ste .then reason.message:", reason.message);
-                        //afwijzen("Gefaald om te fetchen"); //  deze werkt half. Gaat terug vanuit aanroepfunctie. Juiste tekst wordt weergegeven, echter stuitert dan terug naar 2de .then  en opvolgend naar de .catch
+                        //reject("Gefaald om te fetchen"); //  deze werkt half. Gaat terug vanuit aanroepfunctie. Juiste tekst wordt weergegeven, echter stuitert dan terug naar 2de .then  en opvolgend naar de .catch
                         throw new Error("Gefaald om te fetchen");   //Bij deze gaat direct naar de .catch
                     }
             )
@@ -202,7 +201,7 @@ function geoAPI() {
                             if (responseVar.ok === true) {
 
                                 if (data.length === 0) { 
-                                    afwijzen("onherkenbare plaats");    //return "";}      //{ throw new Error("onherkenbare plaats"); }
+                                    reject("onherkenbare plaats");    //return "";}      //{ throw new Error("onherkenbare plaats"); }
                                     
                                 } else {
                                     console.log("geoAPI: 2de .then: data (verderop)", data);
@@ -210,7 +209,7 @@ function geoAPI() {
                                     lon=data[0].lon;
                                     console.log("geoAPI: 2de .then: lat", lat);
                                     console.log("geoAPI: 2de .then: lon", lon);
-                                    vervullen("geslaagd");
+                                    deFunctie("geslaagd");
                                 }
                            
                                 console.log("geoAPI: 2de .then: promiseVar            : ", promiseVar);
@@ -218,42 +217,42 @@ function geoAPI() {
                             } else {
                                 
 
-                                data.cod = data.cod.toString();   //bij data.cod is 401 een nummber.  Bij data.cod = 400 is een string.  Besloten om string van te maken per defintie.
-                                console.log("geoAPI: 2de .then: data.cod (type off): ", typeof data.cod);  
+                                data.cod = data.cod.toString();
+                                console.log("geoAPI: 2de .then: data.cod (type off): ", typeof data.cod);  //bij data.cod is 401 een nummber.  Bij data.cod = 400 is een string.  Besloten om string van te maken per defintie.
 
                                 switch (data.cod) {
                                     case "401":          
-                                        afwijzen("401: Authorisatieproces niet goed verlopen"); 
+                                        reject("401: Authorisatieproces niet goed verlopen"); 
                                         //throw new Error("401: Authorisatieproces niet goed verlopen"); 
                                         break;
 
                                     case "400":          //hier is data.cod een string   
                                         if (data.message === "Nothing to geocode") {          
-                                            afwijzen("Lege plaats"); 
+                                            reject("Lege plaats"); 
                                         }
                                         break;
                                     
                                     default: 
-                                        afwijzen("Client Error"); 
+                                        reject("Client Error"); 
                                 }
 
                                 /*
                                 if (data.cod == "401") {                                   //hier is data.cod een nummber. Yep, bewust "" laten staan
-                                    afwijzen("401: Authorisatieproces niet goed verlopen"); 
+                                    reject("401: Authorisatieproces niet goed verlopen"); 
                                     //throw new Error("401: Authorisatieproces niet goed verlopen"); 
                                 } 
                            
                                 console.log("geoAPI: 2de .then: data.message       : ", data.message);
 
                                 if (data.cod === "400" && data.message === "Nothing to geocode") {      //hier is data.cod een string       
-                                    afwijzen("Lege plaats");     
+                                    reject("Lege plaats");     
                                     
                                 } else {
-                                    afwijzen("Client Error");   
+                                    reject("Client Error");   
                                 }
                                 */
 
-                                console.log("geoAPI: 2de .then: na afwijzen: promiseVar      : ", promiseVar);
+                                console.log("geoAPI: 2de .then: na reject: promiseVar      : ", promiseVar);
                            
                             }
                             
@@ -266,8 +265,8 @@ function geoAPI() {
                 console.log("geoAPI: .CATCH  reason: ", reason);
                 console.log("geoAPI: .CATCH  reason.name:", reason.name);
                 console.log("geoAPI: .CATCH  reason.message:", reason.message);
-                afwijzen("Gefaald om te fetchen");    // Is nodig om de   promiseVar   op rejected te krijgen en terug naar aanroepfunctie te keren met de benodigde zelf creerde foutmelding.
-                //vervullen("om te kijken wat doet. Zou terug moeten gaan naar aanroepfunctie en gaat dan volgende regel uitvoeren in de try en dus niet de catch");  // en dat doet die
+                //reject("Gefaald om te fetchen");    // Is nodig om de   promiseVar   op rejected te krijgen en terug naar aanroepfunctie te keren met de benodigde zelf creerde foutmelding.
+                deFunctie("om te kijken wat doet. Zou terug moeten gaan naar aanroepfunctie en gaat dan volgende regel uitvoeren in de try en dus niet de catch");
                 console.log("geoAPI: 2de .then: promiseVar            : ", promiseVar);
             })
     });
