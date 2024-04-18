@@ -113,7 +113,7 @@ function geoAPI() {
             let samengesteldUrlGEO;    
             let responseVar;           // nodig om in 2de then de zaak beter te kunnen geleiden want vanuit  .json  zijn er verschillende key's die al dan niet worden aangemaakt welke afhankelijk is van of het gefetchste goed is gegaan.
             
-            const urlGEO = 'http://api.openweathermap.org/geo/1.0/direct?';
+            const urlGEO = 'https://api.openweathermap.org/geo/1.0/direct?';
 
             locatiePlaatsnaam = locatie.value;
             samengesteldUrlGEO = urlGEO + "q=" + locatiePlaatsnaam +"&appid=" + appid ;
