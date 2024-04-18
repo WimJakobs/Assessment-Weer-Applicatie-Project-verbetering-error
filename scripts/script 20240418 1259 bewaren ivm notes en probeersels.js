@@ -108,6 +108,8 @@ async function dataOphalen() {
 function geoAPI() {
     
     
+    //return new Promise( (deFunctie, reject) => {
+
     let promiseVar = new Promise( (vervullen, afwijzen) => {         //let promiseVar = new Promise( (deFunctie, reject) => {     
     
             let samengesteldUrlGEO;    
@@ -121,9 +123,14 @@ function geoAPI() {
             console.log("geoAPI: samengesteldUrlGEO", samengesteldUrlGEO);
 
 
-           
+            //let fetchVar = fetch(samengesteldUrlGEO);
+            //console.log(fetchVar);
+            //let responseJSON = fetchVar.json();            
+            //console.log(responseJSON);
+            
 
             fetch(samengesteldUrlGEO)
+            //fetchVar.then(  (response) => {     //1ste .then   Veld 1
             .then(  (response) => {     //1ste .then   Veld 1
                         responseVar = response;
                         console.log("geoAPI: 1ste then: response               : ", response);
@@ -131,6 +138,32 @@ function geoAPI() {
                         console.log("geoAPI: 1ste then: response.status        : ", response.status)
                         console.log("geoAPI: 1ste then: response.status, typeof: ", typeof response.status)
                         
+                        // is niet zinvol gebleken om hier een en ander te vergelijken want al wordt hier gerejected (of gethrowned) de 2de then wordt hoe dan ook uitgevoerd nadat prog teruggekeerd is in   function dataOphalen()  .
+                        // qua volgorde verwerking kan beter de zaak oppakken in de 2de .then .
+                        /*
+                        if (response.ok===false) {
+                            console.log("geoAPI: 1ste then (response): fout        : ", response);
+                            
+                            if (response.status>=400 && response.status<=499) {
+                                if (response.status===401) {
+                                    //fetchVar.reject("401: Authorisatieproces niet goed verlopen"); 
+                                    //reject("401: Authorisatieproces niet goed verlopen"); 
+                                    //return "401: Authorisatieproces niet goed verlopen";   
+                                    //throw new Error("401: Authorisatieproces niet goed verlopen");
+                                } else { 
+                                            if (locatiePlaatsnaam==="") {
+                                                throw new Error("Lege plaats");
+                                                //reject("Lege plaats");
+                                            } else {
+                                                throw new Error("Client Error");
+                                                //reject("Client Error"); 
+                                              }
+                                }
+                            }
+                        }
+                        */
+                        //let responseJSON = response.json();
+                        //console.log(responseJSON);
                         return response.json(); 
                     }
                     ,(reason) => {      //1ste .then   Veld 2
@@ -142,18 +175,24 @@ function geoAPI() {
                     }
             )
             
-            
+            //console.log(fetchVar);
+
+
+            //fetchVar.then( (data) => {                          //2de .then
             .then( (data) => {                          //2de .then
 
                             console.log("geoAPI: 2de .then: responseVar           : ", responseVar);
                             console.log("geoAPI: 2de .then: data                  : ", data);
                             console.log("geoAPI: 2de .then: data.cod (type off): ", typeof data.cod);
+                            //console.log("geoAPI: 2de .then: fetchVar              : ", fetchVar);
                             console.log("geoAPI: 2de .then: promiseVar            : ", promiseVar);
+
+                            
 
                             if (responseVar.ok === true) {
 
                                 if (data.length === 0) { 
-                                    afwijzen("onherkenbare plaats");  
+                                    afwijzen("onherkenbare plaats");    //return "";}      //{ throw new Error("onherkenbare plaats"); }
                                     
                                 } else {
                                     console.log("geoAPI: 2de .then: data (verderop)", data);
@@ -170,22 +209,39 @@ function geoAPI() {
                                 
 
                                 data.cod = data.cod.toString();   //bij data.cod is 401 een nummber.  Bij data.cod = 400 is een string.  Besloten om string van te maken per defintie.
-                                //console.log("geoAPI: 2de .then: data.cod (type off): ", typeof data.cod);  
+                                console.log("geoAPI: 2de .then: data.cod (type off): ", typeof data.cod);  
 
                                 switch (data.cod) {
                                     case "401":          
                                         afwijzen("401: Authorisatieproces niet goed verlopen"); 
+                                        //throw new Error("401: Authorisatieproces niet goed verlopen"); 
                                         break;
 
-                                    case "400": 
+                                    case "400":          //hier is data.cod een string   
                                         if (data.message === "Nothing to geocode") {          
                                             afwijzen("Lege plaats"); 
-                                        } else { afwijzen("Client Error"); }
+                                        }
                                         break;
                                     
                                     default: 
                                         afwijzen("Client Error"); 
                                 }
+
+                                /*
+                                if (data.cod == "401") {                                   //hier is data.cod een nummber. Yep, bewust "" laten staan
+                                    afwijzen("401: Authorisatieproces niet goed verlopen"); 
+                                    //throw new Error("401: Authorisatieproces niet goed verlopen"); 
+                                } 
+                           
+                                console.log("geoAPI: 2de .then: data.message       : ", data.message);
+
+                                if (data.cod === "400" && data.message === "Nothing to geocode") {      //hier is data.cod een string       
+                                    afwijzen("Lege plaats");     
+                                    
+                                } else {
+                                    afwijzen("Client Error");   
+                                }
+                                */
 
                                 console.log("geoAPI: 2de .then: na afwijzen: promiseVar      : ", promiseVar);
                            
@@ -195,7 +251,8 @@ function geoAPI() {
 
                 })
 
-            .catch( (reason) => { 
+            //fetchVar.catch( (reason) => {                    //.catch behorende bij 2de .then          // .catch( (geweigerd) => {   
+            .catch( (reason) => {                    //.catch behorende bij 2de .then  Is niet het geval. e.e.a. afhankelijk waar rejected en throw new error    // .catch( (geweigerd) => {   
                 console.log("geoAPI: .CATCH  reason: ", reason);
                 console.log("geoAPI: .CATCH  reason.name:", reason.name);
                 console.log("geoAPI: .CATCH  reason.message:", reason.message);
@@ -205,10 +262,12 @@ function geoAPI() {
             })
     });
 
-    console.log("geoAPI: ", promiseVar);
-
+    console.log("geoAPI: ", promiseVar)
+    //promiseVar.catch ( (error) => console.log("promiseVar.catch", error) );
         
     return promiseVar;
+
+
 
 
 }
